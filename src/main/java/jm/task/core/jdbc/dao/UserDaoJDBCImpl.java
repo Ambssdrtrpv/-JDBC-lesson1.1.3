@@ -13,7 +13,7 @@ import static jm.task.core.jdbc.util.Util.getConnection;
 public class UserDaoJDBCImpl implements UserDao {
     private Connection connection = getConnection();
 
-    public void createUsersTable() { // TODO
+    public void createUsersTable() {
 
         Statement statement = null;
         try {
@@ -41,7 +41,7 @@ public class UserDaoJDBCImpl implements UserDao {
         }
     }
 
-    public void saveUser(String name, String lastName, byte age) { //TODO
+    public void saveUser(String name, String lastName, byte age) {
         long generatedId = 0;
 
         try {
