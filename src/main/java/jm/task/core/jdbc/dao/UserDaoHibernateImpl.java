@@ -1,9 +1,11 @@
 package jm.task.core.jdbc.dao;
 
 import jm.task.core.jdbc.model.User;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class UserDaoHibernateImpl implements UserDao {
     public UserDaoHibernateImpl() {
 
