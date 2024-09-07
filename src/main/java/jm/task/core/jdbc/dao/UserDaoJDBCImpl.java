@@ -24,27 +24,21 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void createUsersTable() {
 
-        Statement statement = null;
-        try {
-            statement = connection.createStatement();
-            String createTableSQL = "CREATE TABLE IF NOT EXISTS Users ("
+        try (Statement statement = connection.createStatement()){
+
+            statement.execute("CREATE TABLE IF NOT EXISTS Users ("
                     + "id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,"
                     + "name varchar(100) not null,"
                     + "last_name varchar(100) not null,"
-                    + "age smallint not null)";
-
-            statement.execute(createTableSQL);
+                    + "age smallint not null)");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     public void dropUsersTable() {
-        Statement statement = null;
-        try {
-            statement = connection.createStatement();
-            String dropTableSQL = "DROP TABLE IF EXISTS Users";
-            statement.execute(dropTableSQL);
+        try(Statement statement = connection.createStatement()) {
+            statement.execute("DROP TABLE IF EXISTS Users");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -53,10 +47,10 @@ public class UserDaoJDBCImpl implements UserDao {
     public void saveUser(String name, String lastName, byte age) {
         long generatedId = 0;
 
-        try {
-            PreparedStatement insertStatement = connection.prepareStatement(
-                    "INSERT INTO Users (name, last_name, age) VALUES (?, ?, ?)",
-                    Statement.RETURN_GENERATED_KEYS);
+        try(PreparedStatement insertStatement = connection.prepareStatement(
+                "INSERT INTO Users (name, last_name, age) VALUES (?, ?, ?)",
+                Statement.RETURN_GENERATED_KEYS)) {
+
             insertStatement.setString(1, name);
             insertStatement.setString(2, lastName);
             insertStatement.setByte(3, age);
@@ -66,7 +60,6 @@ public class UserDaoJDBCImpl implements UserDao {
                 try (ResultSet generatedKeys = insertStatement.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
                         generatedId = generatedKeys.getLong(1);
-                        //System.out.println("Generated ID: " + generatedId);
                     }
                 }
             }
@@ -77,10 +70,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void removeUserById(long id) {
-        PreparedStatement preparedStatement =
-                null;
-        try {
-            preparedStatement = connection.prepareStatement("DELETE FROM Users WHERE id=?");
+        try(PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM Users WHERE id=?")) {
 
             preparedStatement.setLong(1, id);
 
@@ -93,10 +83,8 @@ public class UserDaoJDBCImpl implements UserDao {
     public List<User> getAllUsers() {
         List<User> allUsers = new ArrayList<>();
 
-        try {
-            Statement statement = connection.createStatement();
-            String SQL = "SELECT * FROM Users";
-            ResultSet resultSet = statement.executeQuery(SQL);
+        try(Statement statement = connection.createStatement()) {
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM Users");
 
             while (resultSet.next()) {
                 User user = new User();
@@ -116,11 +104,8 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void cleanUsersTable() {
-        Statement statement = null;
-        try {
-            statement = connection.createStatement();
-            String dropTableSQL = "TRUNCATE TABLE Users";
-            statement.execute(dropTableSQL);
+        try(Statement statement = connection.createStatement()) {
+            statement.execute("TRUNCATE TABLE Users");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
