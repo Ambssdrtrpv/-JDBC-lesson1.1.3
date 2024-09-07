@@ -6,6 +6,7 @@ import jm.task.core.jdbc.model.User;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 @Service
@@ -17,27 +18,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void createUsersTable() {
+    public void createUsersTable() throws SQLException {
         userDaoJDBCImpl.createUsersTable();
     }
 
-    public void dropUsersTable() {
+    public void dropUsersTable() throws SQLException {
         userDaoJDBCImpl.dropUsersTable();
     }
 
-    public void saveUser(String name, String lastName, byte age) {
+    public void saveUser(String name, String lastName, byte age) throws SQLException {
         userDaoJDBCImpl.saveUser(name, lastName, age);
     }
 
-    public void removeUserById(long id) {
+    public void removeUserById(long id) throws SQLException {
         userDaoJDBCImpl.removeUserById(id);
     }
 
-    public List<User> getAllUsers() {
+    public List<User> getAllUsers() throws SQLException {
         return userDaoJDBCImpl.getAllUsers();
     }
 
-    public void cleanUsersTable() {
+    public void cleanUsersTable() throws SQLException {
         userDaoJDBCImpl.cleanUsersTable();
     }
 }

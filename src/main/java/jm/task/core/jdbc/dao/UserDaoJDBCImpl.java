@@ -22,34 +22,41 @@ public class UserDaoJDBCImpl implements UserDao {
         }
     }
 
-    public void createUsersTable() {
+    public void createUsersTable() throws SQLException {
 
         try (Statement statement = connection.createStatement()){
+            connection.setAutoCommit(false);
 
             statement.execute("CREATE TABLE IF NOT EXISTS Users ("
                     + "id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,"
                     + "name varchar(100) not null,"
                     + "last_name varchar(100) not null,"
                     + "age smallint not null)");
+            connection.commit();
         } catch (SQLException e) {
+            connection.rollback();
             throw new RuntimeException(e);
         }
     }
 
-    public void dropUsersTable() {
+    public void dropUsersTable() throws SQLException {
         try(Statement statement = connection.createStatement()) {
+            connection.setAutoCommit(false);
             statement.execute("DROP TABLE IF EXISTS Users");
+            connection.commit();
         } catch (SQLException e) {
+            connection.rollback();
             throw new RuntimeException(e);
         }
     }
 
-    public void saveUser(String name, String lastName, byte age) {
+    public void saveUser(String name, String lastName, byte age) throws SQLException {
         long generatedId = 0;
 
         try(PreparedStatement insertStatement = connection.prepareStatement(
                 "INSERT INTO Users (name, last_name, age) VALUES (?, ?, ?)",
                 Statement.RETURN_GENERATED_KEYS)) {
+            connection.setAutoCommit(false);
 
             insertStatement.setString(1, name);
             insertStatement.setString(2, lastName);
@@ -63,27 +70,31 @@ public class UserDaoJDBCImpl implements UserDao {
                     }
                 }
             }
-
+            connection.commit();
         } catch (SQLException throwables) {
+            connection.rollback();
             throwables.printStackTrace();
         }
     }
 
-    public void removeUserById(long id) {
+    public void removeUserById(long id) throws SQLException {
         try(PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM Users WHERE id=?")) {
-
+            connection.setAutoCommit(false);
             preparedStatement.setLong(1, id);
 
             preparedStatement.executeUpdate();
+            connection.commit();
         } catch (SQLException throwables) {
+            connection.rollback();
             throwables.printStackTrace();
         }
     }
 
-    public List<User> getAllUsers() {
+    public List<User> getAllUsers() throws SQLException {
         List<User> allUsers = new ArrayList<>();
 
         try(Statement statement = connection.createStatement()) {
+            connection.setAutoCommit(false);
             ResultSet resultSet = statement.executeQuery("SELECT * FROM Users");
 
             while (resultSet.next()) {
@@ -96,17 +107,21 @@ public class UserDaoJDBCImpl implements UserDao {
 
                 allUsers.add(user);
             }
-
+            connection.commit();
         } catch (SQLException throwables) {
+            connection.rollback();
             throwables.printStackTrace();
         }
         return allUsers;
     }
 
-    public void cleanUsersTable() {
+    public void cleanUsersTable() throws SQLException {
         try(Statement statement = connection.createStatement()) {
+            connection.setAutoCommit(false);
             statement.execute("TRUNCATE TABLE Users");
+            connection.commit();
         } catch (SQLException e) {
+            connection.rollback();
             throw new RuntimeException(e);
         }
     }
