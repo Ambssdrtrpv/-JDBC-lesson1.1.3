@@ -5,12 +5,16 @@ import jm.task.core.jdbc.dao.UserDaoJDBCImpl;
 import jm.task.core.jdbc.model.User;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
 
 public class UserServiceImpl implements UserService {
     UserDao userDaoJDBCImpl = new UserDaoJDBCImpl();
+
+    public UserServiceImpl() throws IOException {
+    }
 
     @Override
     public void createUsersTable() {

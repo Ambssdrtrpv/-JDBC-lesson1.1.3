@@ -4,8 +4,18 @@ package jm.task.core.jdbc;
 import jm.task.core.jdbc.service.UserService;
 import jm.task.core.jdbc.service.UserServiceImpl;
 
+import java.io.IOException;
+
 public class Main {
-    private final static UserService userService = new UserServiceImpl();
+    private final static UserService userService;
+
+    static {
+        try {
+            userService = new UserServiceImpl();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public static void main(String[] args) {
         userService.createUsersTable();

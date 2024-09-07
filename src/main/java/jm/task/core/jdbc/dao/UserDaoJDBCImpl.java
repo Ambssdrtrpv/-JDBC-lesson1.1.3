@@ -3,6 +3,7 @@ package jm.task.core.jdbc.dao;
 import jm.task.core.jdbc.model.User;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,15 @@ import static jm.task.core.jdbc.util.Util.getConnection;
 
 @Component
 public class UserDaoJDBCImpl implements UserDao {
-    private Connection connection = getConnection();
+    private Connection connection;
+
+    {
+        try {
+            connection = getConnection();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public void createUsersTable() {
 
