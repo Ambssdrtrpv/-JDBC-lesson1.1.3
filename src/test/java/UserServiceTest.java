@@ -8,13 +8,14 @@ import java.io.IOException;
 import java.util.List;
 
 public class UserServiceTest {
-    private final UserService userService = new UserServiceImpl();
+    private final UserService userService;
 
     private final String testName = "Ivan";
     private final String testLastName = "Ivanov";
     private final byte testAge = 5;
 
     public UserServiceTest() throws IOException {
+        userService = new UserServiceImpl();
     }
 
 

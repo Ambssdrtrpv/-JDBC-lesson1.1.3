@@ -12,7 +12,7 @@ import static jm.task.core.jdbc.util.Util.getConnection;
 
 @Component
 public class UserDaoJDBCImpl implements UserDao {
-    private Connection connection;
+    private final Connection connection;
 
     {
         try {
@@ -84,9 +84,9 @@ public class UserDaoJDBCImpl implements UserDao {
 
             preparedStatement.executeUpdate();
             connection.commit();
-        } catch (SQLException throwables) {
+        } catch (SQLException throwable) {
             connection.rollback();
-            throwables.printStackTrace();
+            throwable.printStackTrace();
         }
     }
 

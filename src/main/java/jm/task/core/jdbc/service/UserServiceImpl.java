@@ -1,8 +1,10 @@
 package jm.task.core.jdbc.service;
 
 import jm.task.core.jdbc.dao.UserDao;
-import jm.task.core.jdbc.dao.UserDaoJDBCImpl;
+import jm.task.core.jdbc.dao.UserDaoHibernateImpl;
+//import jm.task.core.jdbc.dao.UserDaoJDBCImpl;
 import jm.task.core.jdbc.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -10,35 +12,32 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Service
-
 public class UserServiceImpl implements UserService {
-    UserDao userDaoJDBCImpl = new UserDaoJDBCImpl();
+    private final UserDao userDaoHibernateImpl = new UserDaoHibernateImpl();
 
-    public UserServiceImpl() throws IOException {
-    }
 
     @Override
     public void createUsersTable() throws SQLException {
-        userDaoJDBCImpl.createUsersTable();
+        userDaoHibernateImpl.createUsersTable();
     }
 
     public void dropUsersTable() throws SQLException {
-        userDaoJDBCImpl.dropUsersTable();
+        userDaoHibernateImpl.dropUsersTable();
     }
 
     public void saveUser(String name, String lastName, byte age) throws SQLException {
-        userDaoJDBCImpl.saveUser(name, lastName, age);
+        userDaoHibernateImpl.saveUser(name, lastName, age);
     }
 
     public void removeUserById(long id) throws SQLException {
-        userDaoJDBCImpl.removeUserById(id);
+        userDaoHibernateImpl.removeUserById(id);
     }
 
     public List<User> getAllUsers() throws SQLException {
-        return userDaoJDBCImpl.getAllUsers();
+        return userDaoHibernateImpl.getAllUsers();
     }
 
     public void cleanUsersTable() throws SQLException {
-        userDaoJDBCImpl.cleanUsersTable();
+        userDaoHibernateImpl.cleanUsersTable();
     }
 }
